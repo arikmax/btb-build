@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор стоимости проекта</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f8fafc;
+            padding: 20px;
+        }
+
+        .calculator-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: start;
+        }
+
+        /* Left side - Calculator Form */
+        .calculator-form {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .form-header {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .form-header-icon {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            margin-right: 12px;
+            vertical-align: middle;
+        }
+
+        .form-header h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .form-header p {
+            font-size: 16px;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+
+        .form-content {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .form-select, .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 16px;
+            background: white;
+            transition: all 0.2s ease;
+        }
+
+        .form-select:focus, .form-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+            padding-right: 40px;
+        }
+
+        .cost-display {
+            background: #fef3cd;
+            border: 2px solid #f59e0b;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .cost-label {
+            font-size: 14px;
+            color: #92400e;
+            margin-bottom: 8px;
+        }
+
+        .cost-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #f59e0b;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            color: white;
+            border: none;
+            padding: 16px 24px;
+            font-size: 18px;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(249, 115, 22, 0.3);
+        }
+
+        /* Right side - Information */
+        .info-section h2 {
+            font-size: 48px;
+            font-weight: 800;
+            color: #3b82f6;
+            line-height: 1.1;
+            margin-bottom: 24px;
+        }
+
+        .info-description {
+            font-size: 18px;
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        .stats-card {
+            background: linear-gradient(135deg, #ede9fe 0%, #e0e7ff 100%);
+            border: 2px solid #c7d2fe;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+
+        .stats-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .stats-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 12px;
+            color: #f97316;
+        }
+
+        .stats-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #3b82f6;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .stat-item {
+            font-size: 14px;
+        }
+
+        .stat-label {
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-weight: 700;
+            color: #3b82f6;
+            font-size: 16px;
+        }
+
+        .included-list h4 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #3b82f6;
+            margin-bottom: 16px;
+        }
+
+        .included-items {
+            list-style: none;
+        }
+
+        .included-items li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            color: #6b7280;
+            font-size: 16px;
+        }
+
+        .included-items li::before {
+            content: "•";
+            color: #f97316;
+            font-weight: bold;
+            font-size: 20px;
+            margin-right: 12px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .calculator-container {
+                padding: 20px;
+            }
+
+            .calculator-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .info-section h2 {
+                font-size: 36px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator-container">
+        <div class="calculator-grid">
+            <!-- Calculator Form -->
+            <div class="calculator-form">
+                <div class="form-header">
+                    <h3>
+                        <svg class="form-header-icon" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+                        </svg>
+                        Рассчитайте предварительную стоимость
+                    </h3>
+                    <p>Получите примерную стоимость вашего проекта за 30 секунд</p>
+                </div>
+                <div class="form-content">
+                    <div class="form-group">
+                        <label class="form-label" for="object-type">Тип объекта</label>
+                        <select class="form-select" id="object-type">
+                            <option value="">Выберите тип объекта</option>
+                            <option value="apartment">Квартира</option>
+                            <option value="house">Частный дом</option>
+                            <option value="office">Офис</option>
+                            <option value="production">Производство</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="area">Площадь, м²</label>
+                        <input class="form-input" type="number" id="area" placeholder="Введите площадь">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="service">Основная услуга</label>
+                        <select class="form-select" id="service">
+                            <option value="">Выберите услугу</option>
+                            <option value="heating">Отопление</option>
+                            <option value="water">Водоснабжение</option>
+                            <option value="sewage">Канализация</option>
+                            <option value="complex">Комплексное решение</option>
+                        </select>
+                    </div>
+
+                    <div class="cost-display">
+                        <div class="cost-label">Предварительная стоимость:</div>
+                        <div class="cost-value" id="cost-result">Заполните все поля</div>
+                    </div>
+
+                    <button class="submit-btn" type="button">Получить точный расчет</button>
+                </div>
+            </div>
+
+            <!-- Information Section -->
+            <div class="info-section">
+                <h2>Узнайте стоимость вашего проекта</h2>
+                <p class="info-description">
+                    Наш калькулятор поможет вам получить предварительную оценку стоимости работ. 
+                    Для точного расчета наш инженер приедет к вам бесплатно.
+                </p>
+
+                <div class="stats-card">
+                    <div class="stats-header">
+                        <svg class="stats-icon" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+                        </svg>
+                        <h3 class="stats-title">Средняя стоимость проектов</h3>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-label">Квартира:</div>
+                            <div class="stat-value">150-300 тыс. ₽</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Частный дом:</div>
+                            <div class="stat-value">300-800 тыс. ₽</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Офис:</div>
+                            <div class="stat-value">200-500 тыс. ₽</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Производство:</div>
+                            <div class="stat-value">от 1 млн ₽</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="included-list">
+                    <h4>В стоимость входит:</h4>
+                    <ul class="included-items">
+                        <li>Проектирование и согласование</li>
+                        <li>Все материалы и оборудование</li>
+                        <li>Монтажные работы</li>
+                        <li>Пуско-наладочные работы</li>
+                        <li>Гарантийное обслуживание</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function calculateCost() {
+            const objectType = document.getElementById('object-type').value;
+            const area = document.getElementById('area').value;
+            const resultElement = document.getElementById('cost-result');
+
+            if (!area || !objectType) {
+                resultElement.textContent = 'Заполните все поля';
+                return;
+            }
+
+            const basePrices = {
+                'apartment': 5000,
+                'house': 8000, 
+                'office': 6000,
+                'production': 10000
+            };
+
+            const basePrice = basePrices[objectType] || 5000;
+            const result = parseInt(area) * basePrice;
+            
+            resultElement.textContent = `${result.toLocaleString()} ₽`;
+        }
+
+        // Event listeners
+        document.getElementById('object-type').addEventListener('change', calculateCost);
+        document.getElementById('area').addEventListener('input', calculateCost);
+        document.getElementById('service').addEventListener('change', calculateCost);
+
+        // Submit button handler
+        document.querySelector('.submit-btn').addEventListener('click', function() {
+            alert('Здесь будет форма отправки заявки или редирект на страницу заявки');
+        });
+    </script>
+</body>
+</html>
