@@ -5,9 +5,10 @@ import { CheckCircle, Clock, Shield, Phone } from "lucide-react";
 import heroImage from "@/assets/hero-bg.jpg";
 
 const problemsList = [
-  { icon: "🔧", text: "Старые трубы дают течь?" },
-  { icon: "💰", text: "Растут счета за отопление?" },
-  { icon: "🔄", text: "Приходится переделывать работу?" }
+  { icon: "💰", text: "Прозрачные сметы и фиксированные цены" },
+  { icon: "👨‍💼", text: "Личное сопровождение экспертов" },
+  { icon: "🏆", text: "Надежность и репутация подрядчика" },
+  { icon: "✅", text: "Гарантии результата (экономия, сроки, сервис)" }
 ];
 
 export const HeroSection = () => {
@@ -42,7 +43,7 @@ export const HeroSection = () => {
           </div>
           
           {/* Problems */}
-          <div className="grid md:grid-cols-3 gap-4 my-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 my-8">
             {problemsList.map((problem, index) => (
               <div key={index} className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
                 <div className="flex items-center gap-3">
